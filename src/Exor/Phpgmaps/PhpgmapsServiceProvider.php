@@ -19,7 +19,7 @@ class PhpgmapsServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('Exor/phpgmaps');
+		$this->package('exor/phpgmaps');
 	}
 
 	/**

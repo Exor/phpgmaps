@@ -1,0 +1,258 @@
+[33mcommit 712fb46b8612c6e4ca5f895ef7461bb94a558551[m
+Author: Jonathan Slabaugh <jonathan.slabaugh@gmail.com>
+Date:   Fri Mar 18 22:29:39 2016 +0900
+
+    Initial Commit
+
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5826402[m
+[1m--- /dev/null[m
+[1m+++ b/.gitignore[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32m/vendor[m
+[32m+[m[32mcomposer.phar[m
+[32m+[m[32mcomposer.lock[m
+[32m+[m[32m.DS_Store[m
+[1mdiff --git a/.travis.yml b/.travis.yml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..aa14ee5[m
+[1m--- /dev/null[m
+[1m+++ b/.travis.yml[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32mlanguage: php[m
+[32m+[m
+[32m+[m[32mphp:[m
+[32m+[m[32m  - 5.3[m
+[32m+[m[32m  - 5.4[m
+[32m+[m[32m  - 5.5[m
+[32m+[m[32m  - 5.6[m
+[32m+[m[32m  - hhvm[m
+[32m+[m
+[32m+[m[32mbefore_script:[m
+[32m+[m[32m  - composer self-update[m
+[32m+[m[32m  - composer install --prefer-source --no-interaction --dev[m
+[32m+[m
+[32m+[m[32mscript: phpunit[m
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3efe748[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1,69 @@[m
+[32m+[m[32m## Phpgmaps[m
+[32m+[m[32mA none CI implementation of BIOINSTALL's [CodeIgniter library](http://github.com/BIOSTALL/CodeIgniter-Google-Maps-V3-API-Library).[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32mI found this library to be incredibly useful when I was working in CodeIgniter. However a little bit of work needed to be done to use it in a Laravel project. I can't take any of the credit for the actual "heavy lifting" going on in the class.[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m[![Latest Stable Version](https://poser.pugx.org/appitventures/phpgmaps/v/stable.svg)](https://packagist.org/packages/appitventures/phpgmaps)[m
+[32m+[m[32m[![Total Downloads](https://poser.pugx.org/appitventures/phpgmaps/downloads.svg)](https://packagist.org/packages/appitventures/phpgmaps)[m
+[32m+[m[32m[![Monthly Downloads](https://poser.pugx.org/appitventures/phpgmaps/d/monthly.png)](https://packagist.org/packages/appitventures/phpgmaps)[m
+[32m+[m[32m[![License](https://poser.pugx.org/appitventures/phpgmaps/license.svg)](https://packagist.org/packages/appitventures/phpgmaps)[m
+[32m+[m
+[32m+[m[32m#Installation[m
+[32m+[m
+[32m+[m[32mAdd this package in your `composer.json` and update composer.[m
+[32m+[m
+[32m+[m[32mFor Laravel 4.\* use the below line. Please be aware that I only have the time to support the latest stable release of Laravel. So any future updates (features, security, or otherwise) will not be applied to the branch for laravel4 compatibility[m
+[32m+[m
+[32m+[m[32m```php[m
+[32m+[m[32m"appitventures/phpgmaps": "1.0.*@dev"[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mFor Laravel 5.\* use the below line[m
+[32m+[m[41m [m
+[32m+[m[32m```php[m
+[32m+[m[32m"appitventures/phpgmaps": "2.0.*@dev"[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mAfter updating composer, add the ServiceProvider to the providers array in `app/config/app.php`[m
+[32m+[m
+[32m+[m[32m```php[m
+[32m+[m[32m'Appitventures\Phpgmaps\PhpgmapsServiceProvider',[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mAnd the Facade[m
+[32m+[m
+[32m+[m[32m```php[m
+[32m+[m[32m'Gmaps' => 'Appitventures\Phpgmaps\Facades\Phpgmaps',[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### Example[m[41m [m
+[32m+[m[32mThe following code will prompt the user for access to their geolocation and then creates a map centered on their lat/lng[m
+[32m+[m
+[32m+[m[32m    Route::get('/', function(){[m
+[32m+[m[32m        $config = array();[m
+[32m+[m[32m        $config['center'] = 'auto';[m
+[32m+[m[32m        $config['onboundschanged'] = 'if (!centreGot) {[m
+[32m+[m[32m                var mapCentre = map.getCenter();[m
+[32m+[m[32m                marker_0.setOptions({[m
+[32m+[m[32m                    position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng())[m
+[32m+[m[32m                });[m
+[32m+[m[32m            }[m
+[32m+[m[32m            centreGot = true;';[m
+[32m+[m[41m            [m
+[32m+[m[32m        Gmaps::initialize($config);[m
+[32m+[m
+[32m+[m[32m        // set up the marker ready for positioning[m
+[32m+[m[32m        // once we know the users location[m
+[32m+[m[32m        $marker = array();[m
+[32m+[m[32m        Gmaps::add_marker($marker);[m
+[32m+[m
+[32m+[m[32m        $map = Gmaps::create_map();[m
+[32m+[m[32m        echo "<html><head><script type="text/javascript">var centreGot = false;</script>".$map['js']."</head><body>".$map['html']."</body></html>";[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m### More Examples[m
+[32m+[m[32mBIOINSTALL has a great website showing how to do all the things with the class. No reason to reinvent the wheel, so [here](http://biostall.com/demos/google-maps-v3-api-codeigniter-library/) it is. The only thing to note is that `$this->googlemaps` is now `Gmaps::`.[m
+[1mdiff --git a/composer.json b/composer.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..abbe355[m
+[1m--- /dev/null[m
+[1m+++ b/composer.json[m
+[36m@@ -0,0 +1,27 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "name": "Exor/phpgmaps",[m
+[32m+[m[32m  "description": "",[m
+[32m+[m[32m  "authors": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m      "name": "Exor",[m
+[32m+[m[32m      "email": "darkex@gmail.com"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  ],[m
+[32m+[m[32m  "require": {[m
+[32m+[m[32m    "php": ">=5.4.0",[m
+[32m+[m[32m    "illuminate/support": "4.2.*"[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "autoload": {[m
+[32m+[m[32m    "psr-0": {[m
+[32m+[m[32m      "Exor\\Phpgmaps\\": "src/"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "extra": {[m
+[32m+[m[32m    "branch-alias": {[m
+[32m+[m[32m      "dev-laravel4": "1.0-dev",[m
+[32m+[m[32m      "dev-develop": "1.1-dev",[m
+[32m+[m[32m      "dev-master": "1.0-dev"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "minimum-stability": "stable"[m
+[32m+[m[32m}[m
+[1mdiff --git a/phpunit.xml b/phpunit.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3347b75[m
+[1m--- /dev/null[m
+[1m+++ b/phpunit.xml[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="UTF-8"?>[m
+[32m+[m[32m<phpunit backupGlobals="false"[m
+[32m+[m[32m         backupStaticAttributes="false"[m
+[32m+[m[32m         bootstrap="vendor/autoload.php"[m
+[32m+[m[32m         colors="true"[m
+[32m+[m[32m         convertErrorsToExceptions="true"[m
+[32m+[m[32m         convertNoticesToExceptions="true"[m
+[32m+[m[32m         convertWarningsToExceptions="true"[m
+[32m+[m[32m         processIsolation="false"[m
+[32m+[m[32m         stopOnFailure="false"[m
+[32m+[m[32m         syntaxCheck="false"[m
+[32m+[m[32m>[m
+[32m+[m[32m    <testsuites>[m
+[32m+[m[32m        <testsuite name="Package Test Suite">[m
+[32m+[m[32m            <directory suffix=".php">./tests/</directory>[m
+[32m+[m[32m        </testsuite>[m
+[32m+[m[32m    </testsuites>[m
+[32m+[m[32m</phpunit>[m
+[1mdiff --git a/src/Exor/Phpgmaps/Facades/Phpgmaps.php b/src/Exor/Phpgmaps/Facades/Phpgmaps.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..63e7d43[m
+[1m--- /dev/null[m
+[1m+++ b/src/Exor/Phpgmaps/Facades/Phpgmaps.php[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32m<?php namespace Exor\Phpgmaps\Facades;[m
+[32m+[m
+[32m+[m[32muse Illuminate\Support\Facades\Facade;[m
+[32m+[m
+[32m+[m[32mclass Phpgmaps extends Facade {[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Get the registered name of the component.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return string[m
+[32m+[m[32m     */[m
+[32m+[m[32m    protected static function getFacadeAccessor() { return 'phpgmaps'; }[m
+[32m+[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/Exor/Phpgmaps/Phpgmaps.php b/src/Exor/Phpgmaps/Phpgmaps.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..ca19499[m
+[1m--- /dev/null[m
+[1m+++ b/src/Exor/Phpgmaps/Phpgmaps.php[m
+[36m@@ -0,0 +1,2250 @@[m
+[32m+[m[32m<?php  namespace Exor\Phpgmaps;[m
+[32m+[m
+[32m+[m[32mclass Phpgmaps {[m
+[32m+[m
+[32m+[m[32m    protected $output_js;[m
+[32m+[m[32m    protected $output_js_contents;[m
+[32m+[m[32m    protected $output_html;[m
+[32m+[m
+[32m+[m[32m    var $adsense					= FALSE; 					// Whether Google Adsense For Content should be enabled[m
+[32m+[m[32m    var $adsenseChannelNumber		= ''; 						// The Adsense channel number for tracking the performance of this AdUnit[m
+[32m+[m[32m    var $adsenseFormat				= 'HALF_BANNER';			// The format of the AdUnit[m
+[32m+[m[32m    var $adsensePosition			= 'TOP_CENTER';				// The position of the AdUnit[m
+[32m+[m[32m    var $adsensePublisherID			= '';						// Your Google AdSense publisher ID[m
+[32m+[m[32m    var $apiKey						= ''; 						// If you've got an API key you can use it by passing this parameter. Setup an API key here: https://code.google.com/apis/console[m
+[32m+[m[32m    var $backgroundColor			= '';						// A hex color value shown as the map background when tiles have not yet loaded as the user pans[m
+[32m+[m[32m    var $bicyclingOverlay			= FALSE;					// If set to TRUE will overlay bicycling information (ie. bike paths and suggested routes) onto the map by default[m
+[32m+[m[32m    var $center						= "37.4419, -122.1419";		// Sets the default center location (lat/long co-ordinate or address) of the map. If defaulting to the users location set to "auto"[m
+[32m+[m[32m    var $class 						= '';						// A class name if wishing to style the map further through CSS. Can also be useful if wanting it to be responsive etc.[m
+[32m+[m[32m    var $cluster					= FALSE;					// Whether to cluster markers[m
+[32m+[m[32m    var $clusterGridSize			= 60;						// The grid size of a cluster in pixels[m
+[32m+[m[32m    var $clusterMaxZoom				= '';						// The maximum zoom level that a marker can be part of a cluster[m
+[32m+[m[32m    var $clusterZoomOnClick			= TRUE;						// Whether the default behaviour of clicking on a cluster is to zoom into it[m
+[32m+[m[32m    var $clusterAverageCenter		= FALSE;					// Whether the center of each cluster should be the average of all markers in the cluster[m
+[32m+[m[32m    var $clusterMinimumClusterSize	= 2;						// The minimum number of markers to be in a cluster before the markers are hidden and a count is shown[m
+[32m+[m[32m    var $disableDefaultUI			= FALSE;					// If set to TRUE will hide the default controls (ie. zoom, scale etc)[m
+[32m+[m[32m    var $disableDoubleClickZoom		= FALSE;					// If set to TRUE will disable zooming when a double click occurs[m
+[32m+[m[32m    var $disableMapTypeControl		= FALSE;					// If set to TRUE will hide the MapType control (ie. Map, Satellite, Hybrid, Terrain)[m
+[32m+[m[32m    var $disableNavigationControl	= FALSE;					// If set to TRUE will hide the Navigation control (ie. zoom in/out, pan)[m
+[32m+[m[32m    var $disableScaleControl		= FALSE;					// If set to TRUE will hide the Scale control[m
+[32m+[m[32m    var $disableStreetViewControl	= FALSE;					// If set to TRUE will hide the Street View control[m
+[32m+[m[32m    var $draggable					= TRUE;						// If set to FALSE will prevent the map from being dragged around[m
+[32m+[m[32m    var $draggableCursor			= '';						// The name or url of the cursor to display on a draggable object[m
+[32m+[m[32m    var $draggingCursor				= '';						// The name or url of the cursor to display when an object is being dragged[m
+[32m+[m[32m    var $geocodeCaching				= FALSE;					// If set to TRUE will cache any geocode requests made when an address is used instead of a lat/long. Requires DB table to be created (see documentation)[m
+[32m+[m[32m    var $https						= FALSE;					// If set to TRUE will load the Google Maps JavaScript API over HTTPS, allowing you to utilize the API within your HTTPS secure application[m
+[32m+[m[32m    var $navigationControlPosition	= '';						// The position of the Navigation control, eg. 'BOTTOM_RIGHT'[m
+[32m+[m[32m    var $infowindowMaxWidth			= 0;						// The maximum width of the infowindow in pixels. Expecting an integer without units[m
+[32m+[m[32m    var $keyboardShortcuts			= TRUE;						// If set to FALSE will disable to map being controlled via the keyboard[m
+[32m+[m[32m    var $jsfile						= '';						// Set this to the path of an external JS file if you wish the JavaScript to be placed in a file rather than output directly into the <head></head> section. The library will try to create the file if it does not exist already. Please ensure the destination file is writeable[m
+[32m+[m[32m    var $kmlLayerURL				= '';						// A URL to publicly available KML or GeoRSS data for displaying geographic information. Multiple KML layers can be passed in by using an array of URL's. Note, if using multiple you'll probably have to set $kmlLayerPreserveViewport to true and manually set map center and zoom[m
+[32m+[m[32m    var $kmlLayerPreserveViewport	= FALSE;					// Specifies whether the map should be adjusted to the bounds of the KmlLayer's contents. By default the map is zoomed and positioned to show the entirety of the layer's contents[m
+[32m+[m[32m    var $language					= '';						// The map will by default load in the language of the browser. This can be overriden however here. For a full list of codes see https://spreadsheets.google.com/pub?key=p9pdwsai2hDMsLkXsoM05KQ&gid=1[m
+[32m+[m[32m    var $loadAsynchronously			= FALSE;					// Load the map and API asynchronously once the page has loaded[m
+[32m+[m[32m    var $map_div_id					= "map_canvas";				// The ID of the <div></div> that is output which contains the map[m
+[32m+[m[32m    var $map_height					= "450px";					// The height of the map container. Any units (ie 'px') can be used. If no units are provided 'px' will be presumed[m
+[32m+[m[32m    var $map_name					= "map";					// The JS reference to the map. Currently not used but to be used in the future when multiple maps are supported[m
+[32m+[m[32m    var $map_type					= "ROADMAP";				// The default MapType. Values accepted are 'HYBRID', 'ROADMAP', 'SATELLITE' or 'TERRAIN'[m
+[32m+[m[32m    var $map_types_available		= array();					// The other MapTypes available for selection on the map[m
+[32m+[m[32m    var $map_width					= "100%";					// The width of the map container. Any units (ie 'px') can be used. If no units are provided 'px' will be presumed[m
+[32m+[m[32m    var $maps_loaded				= 0;						// Counter which keeps track of how many maps have been created to avoid standard functions being output twice[m
+[32m+[m[32m    var $mapTypeControlPosition		= '';						// The position of the MapType control, eg. 'BOTTOM_RIGHT'[m
+[32m+[m[32m    var $mapTypeControlStyle		= '';						// The style of the MapType control. blank, 'DROPDOWN_MENU' or 'HORIZONTAL_BAR' values accepted.[m
+[32m+[m[32m    var $minzoom					= '';						// The minimum zoom level which will be displayed on the map[m
+[32m+[m[32m    var $maxzoom					= '';						// The maximum zoom level which will be displayed on the map[m
+[32m+[m[32m    var $minifyJS					= FALSE;					// If TRUE will run the JavaScript through Jsmin.php (this file and PHP5+ required) to minify the code[m
+[32m+[m[32m    var $noClear					= FALSE;					// If TRUE do not clear the contents of the map div[m
+[32m+[m[32m    var $onboundschanged			= '';						// The JavaScript action to perform when the viewport bounds have changed[m
+[32m+[m[32m    var $oncenterchanged			= '';						// The JavaScript action to perform when themap center property changes[m
+[32m+[m[32m    var $onclick					= '';						// The JavaScript action to perform when the map is clicked[m
+[32m+[m[32m    var $ondblclick					= '';						// The JavaScript action to perform when the map is double-clicked[m
+[32m+[m[32m    var $ondrag						= '';						// The JavaScript action to perform while the map is dragged[m
+[32m+[m[32m    var $ondragend					= '';						// The JavaScript action to perform when the user stops dragging the map[m
+[
