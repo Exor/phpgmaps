@@ -1,0 +1,27 @@
+{
+  "name": "Exor/phpgmaps",
+  "description": "",
+  "authors": [
+    {
+      "name": "Exor",
+      "email": "darkex@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/support": "4.2.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "Exor\\Phpgmaps\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-laravel4": "1.0-dev",
+      "dev-develop": "1.1-dev",
+      "dev-master": "1.0-dev"
+    }
+  },
+  "minimum-stability": "stable"
+}

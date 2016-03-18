@@ -1,0 +1,14 @@
+<?php namespace Exor\Phpgmaps\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
+class Phpgmaps extends Facade {
+
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor() { return 'phpgmaps'; }
+
+}
